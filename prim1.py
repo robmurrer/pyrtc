@@ -4,77 +4,79 @@ import math
 EPSILON = 1e-6
 
 #tuples are always (4 in size) x, y, z, w
+tuple3 = tuple[float,float,float] #type required for python sub 3.12
+tuple4 = tuple[float,float,float,float] #type required for python sub 3.12
 
-def get_vector(x,y,z):
+def get_vector(x:float,y:float,z:float)->tuple4:
     return (x,y,z,0)
 
-def get_point(x,y,z):
+def get_point(x:float,y:float,z:float)->tuple4:
     return (x,y,z,1)
 
-def float_is_equal(a, b, eps=EPSILON):
+def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
     return math.fabs(a-b) < eps
 
-def tuple_is_point(tuple):
+def tuple_is_point(tuple:tuple4):
     return int(tuple[-1]) == 1 #do we need this cast? does it slow us down?
 
-def tuple_is_equal(a, b, eps=EPSILON):
+def tuple_is_equal(a:tuple4, b:tuple4, eps=EPSILON):
     return \
         float_is_equal(a[0], b[0], eps) and \
         float_is_equal(a[1], b[1], eps) and \
         float_is_equal(a[2], b[2], eps) and \
         float_is_equal(a[3], b[3], eps)
 
-def tuple3_equal(a, b, eps=EPSILON):
+def tuple3_equal(a:tuple3, b:tuple3, eps=EPSILON):
     return \
         float_is_equal(a[0], b[0], eps) and \
         float_is_equal(a[1], b[1], eps) and \
         float_is_equal(a[2], b[2], eps)
 
-def tuple_neg(a):
+def tuple_neg(a:tuple4):
     return (-a[0], -a[1], -a[2], -a[3])
 
-def tuple_add(a,b):
+def tuple_add(a:tuple4,b:tuple4):
     return (a[0]+b[0], a[1]+b[1], a[2]+b[2], a[3]+b[3])
 
-def tuple_sub(a,b):
+def tuple_sub(a:tuple4,b:tuple4):
     return (a[0]-b[0], a[1]-b[1], a[2]-b[2], a[3]-b[3])
 
-def tuple_mul_scale(tuple, scalar):
+def tuple_mul_scale(tuple:tuple4, scalar:float):
     return (scalar*tuple[0], scalar*tuple[1], scalar*tuple[2], scalar*tuple[3])
 
-def tuple_div_scale(tuple, scalar):
+def tuple_div_scale(tuple:tuple4, scalar:float):
     return tuple_mul_scale(tuple,1/scalar)
 
-def tuple_mag(tuple):
+def tuple_mag(tuple:tuple4):
     return math.sqrt(tuple[0]**2 + tuple[1]**2 + tuple[2]**2 + tuple[3]**2)
 
-def tuple_norm(tuple):
+def tuple_norm(tuple:tuple4):
     mag = tuple_mag(tuple)
     return tuple_div_scale(tuple, mag)
 
-def tuple_dot(a,b):
+def tuple_dot(a:tuple4, b:tuple4):
     return a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3]
 
 X,Y,Z = range(3) 
-def tuple_cross(a,b):
+def tuple_cross(a:tuple3, b:tuple3):
     return (a[Y]*b[Z]-a[Z]*b[Y], 
             a[Z]*b[X]-a[X]*b[Z],
             a[X]*b[Y]-a[Y]*b[X],0) #don't forget tuples are 4 but we ignore last in cross
 
 R,G,B = range(3)
-def get_color(r,g,b):
+def get_color(r:float, g:float, b:float)->tuple:
     return (r,g,b)
 
-def color_add(a,b):
+def color_add(a:tuple3, b:tuple3):
     return (a[R]+b[R],a[G]+b[G],a[B]+b[B])
 
-def color_sub(a,b):
+def color_sub(a:tuple3, b:tuple3):
     return (a[R]-b[R],a[G]-b[G],a[B]-b[B])
 
-def color_scale(a,scale):
+def color_scale(a:tuple3, scale:float):
     return (a[R]*scale,a[G]*scale,a[B]*scale)
 
-def color_mul(a,b):
+def color_mul(a:tuple3, b:tuple3):
     return (a[R]*b[R],a[G]*b[G],a[B]*b[B])
 
 def test_colors():
@@ -83,6 +85,8 @@ def test_colors():
     assert(tuple3_equal(color_add(c1,c2), (1.6,0.7,1.0)))
     assert(tuple3_equal(color_sub(c1,c2), (0.2,0.5,0.5)))
     assert(tuple3_equal(color_scale((0.2,0.3,0.4), scale=2), (0.4,0.6,0.8)))
+    assert(tuple3_equal(color_mul((1,0.2,0.4), (0.9,1,0.1)),(0.9,0.2,0.04)))
+
 
 
 
