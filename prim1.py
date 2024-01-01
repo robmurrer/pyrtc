@@ -6,12 +6,16 @@ EPSILON = 1e-6
 #tuples are always (4 in size) x, y, z, w
 tuple3 = tuple[float,float,float] #type required for python sub 3.12
 tuple4 = tuple[float,float,float,float] #type required for python sub 3.12
+matrix = list[list[float]]
 
 def get_vector(x:float,y:float,z:float)->tuple4:
     return (x,y,z,0)
 
 def get_point(x:float,y:float,z:float)->tuple4:
     return (x,y,z,1)
+
+def get_matrix(width: int, height: int)->matrix:
+    return [[0 for i in range(height)] for j in range(width)]
 
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
     return math.fabs(a-b) < eps
@@ -86,9 +90,6 @@ def test_colors():
     assert(tuple3_equal(color_sub(c1,c2), (0.2,0.5,0.5)))
     assert(tuple3_equal(color_scale((0.2,0.3,0.4), scale=2), (0.4,0.6,0.8)))
     assert(tuple3_equal(color_mul((1,0.2,0.4), (0.9,1,0.1)),(0.9,0.2,0.04)))
-
-
-
 
     print("Color Tests Passed")
 test_colors()

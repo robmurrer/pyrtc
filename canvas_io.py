@@ -1,7 +1,7 @@
 import prim1 as pv
 import numpy as np
 
-canvas = list[list[list[float]]] #fast enough or should this be numpy at top
+canvas = list[list[list[float]]] #fast enough or should this be numpy at top?
 
 def get_canvas_np(width: int, height: int)->np.ndarray:
     return np.zeros((width,height,3), dtype=np.double)
