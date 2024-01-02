@@ -1,7 +1,8 @@
 import prim1 as pr
+import canvas_io as cvi
 
 ball_pos = pr.get_point(0,1,0)
-ball_vel = pr.tuple_norm(pr.get_vector(1,1,0))
+ball_vel = pr.tuple_norm(pr.tuple_mul_scale(pr.get_vector(1,1.8,0), 11.25))
 
 env_gravity = pr.get_vector(0,-0.1,0)
 env_wind = pr.get_vector(-0.01,0,0)
@@ -22,4 +23,17 @@ def sim(ball_pos, ball_vel, max_iters=1e3):
     return pos_t
 
 
-print(sim(ball_pos,ball_vel))
+pos = sim(ball_pos,ball_vel)
+canvas = cvi.get_canvas(900,550)
+for p in pos:
+    x = int(p[0])
+    y = int(550-p[1]) #swap y axis
+    cvi.canvas_write_pixel(canvas, x, y, (1,2,3))
+
+cvi.canvas_write_pixel(canvas, 0, 0, (10,0,0))
+print("writing to disk")
+import time
+tic = time.perf_counter()
+cvi.canvas_to_ppm(canvas, "ball2.ppm")
+toc = time.perf_counter()
+print("done: " + str(toc-tic) + " seconds")

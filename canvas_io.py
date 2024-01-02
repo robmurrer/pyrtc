@@ -10,18 +10,18 @@ def get_canvas(width: int, height: int)->canvas:
     return [[[0 for i in range(3)] for j in range(height)] for k in range(width)]
 
 def canvas_write_pixel(canvas: canvas, x: int, y: int, color: pv.tuple3):
-    assert(y < len(canvas[0]))
-    assert(x < len(canvas))
-    assert(x >=0 and y >=0)
+    if y >= len(canvas[0]): return
+    if x >= len(canvas): return
+    if x < 0 and y < 0: return
+
+    #assert(y < len(canvas[0]))
+    #assert(x < len(canvas))
+    #assert(x >=0 and y >=0)
 
     canvas[x][y] = color
 
-    #canvas[x][y][0] = color[0]
-    #canvas[x][y][1] = color[1]
-    #canvas[x][y][2] = color[2]
 
-
-def canvas_to_ppm_str(canvas: canvas)->str:
+def canvas_to_ppm(canvas: canvas, filename: str)->str:
     width = len(canvas)
     assert(width >=0)
     height = len(canvas[0])
@@ -41,19 +41,15 @@ def canvas_to_ppm_str(canvas: canvas)->str:
     c = CAP_COLOR*(c / max)
 
     import os 
-    out_str = "P3" + os.linesep 
-    out_str = out_str + str(width) + " " + str(height) + os.linesep #copilot
-    out_str = out_str + str(CAP_COLOR) + os.linesep #copilot
-    for i in range(len(c)):
-        out_str = out_str + str(int(c[i])) + " "
-        if (i+1) % (colors*width) == 0:
-            out_str = out_str + os.linesep #copilot
-
-    return out_str 
-
-def canvas_to_ppm(canvas: canvas, filename: str): #copilot
     with open(filename, "w") as f:
-        f.write(canvas_to_ppm_str(canvas))
+        f.write("P3" + os.linesep)
+        f.write(str(width) + " " + str(height) + os.linesep)
+        f.write(str(CAP_COLOR) + os.linesep)
+        for i in range(len(c)):
+            f.write(str(int(c[i])) + " ")
+            if (i+1) % (colors*width) == 0:
+                f.write(os.linesep)
+
  
 def test_Canvas():
     c = get_canvas(100,100)
@@ -67,18 +63,16 @@ def test_Canvas():
     assert(pv.float_is_equal(c[65][75][2], 3))
 
     # turn off cause it would hit disk every load
-    #canvas_to_ppm(c, "test.ppm")
+    canvas_to_ppm(c, "test.ppm")
 
     c = get_canvas(5,5)
     canvas_write_pixel(c, 1, 1, (1,2,3))
     canvas_write_pixel(c, 0, 0, (1,1,1))
-    cstr = canvas_to_ppm_str(c)
 
     c = get_canvas(5,3)
     canvas_write_pixel(c, 0, 0, (1.5,0,0))
     canvas_write_pixel(c, 2, 1, (0, 0.5, 0))
     canvas_write_pixel(c, 4, 2, (-0.5, 0, 1))
-    cstr = canvas_to_ppm_str(c)
     #print(cstr)
 
 
