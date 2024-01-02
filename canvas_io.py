@@ -1,18 +1,20 @@
 import prim1 as pv
 import numpy as np
 
-canvas = list[list[list[float]]] #fast enough or should this be numpy at top?
+#canvas = list[list[list[float]]] #fast enough or should this be numpy at top?
+canvas = np.array
 
 def get_canvas_np(width: int, height: int)->np.ndarray:
     return np.zeros((width,height,3), dtype=np.double)
 
 def get_canvas(width: int, height: int)->canvas:
-    return [[[0 for i in range(3)] for j in range(height)] for k in range(width)]
+    #return [[[0 for i in range(3)] for j in range(height)] for k in range(width)]
+    return np.zeros((width,height,3), dtype=np.double)
 
 def canvas_write_pixel(canvas: canvas, x: int, y: int, color: pv.tuple3):
     if y >= len(canvas[0]): return
     if x >= len(canvas): return
-    if x < 0 and y < 0: return
+    if x < 0 or y < 0: return
 
     #assert(y < len(canvas[0]))
     #assert(x < len(canvas))
