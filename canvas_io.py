@@ -2,7 +2,7 @@ import prim1 as pv
 import numpy as np
 
 #canvas = list[list[list[float]]] #fast enough or should this be numpy at top?
-canvas = np.array
+canvas = np.ndarray
 
 def get_canvas_np(width: int, height: int)->np.ndarray:
     return np.zeros((width,height,3), dtype=np.double)
@@ -54,6 +54,15 @@ def canvas_to_ppm(canvas: canvas, filename: str)->str:
 
  
 def test_Canvas():
+    """
+    Function to test the Canvas class.
+
+    This function creates a canvas, writes pixels to it, and performs assertions to verify the correctness of the canvas operations.
+    It also saves the canvas as a PPM file and prints a success message.
+
+    Returns:
+        None
+    """
     c = get_canvas(100,100)
     canvas_write_pixel(c, 50, 50, (1,2,3))
     assert(pv.float_is_equal(c[50][50][0], 1))

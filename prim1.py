@@ -17,6 +17,7 @@ def get_point(x:float,y:float,z:float)->tuple4:
 def get_matrix(width: int, height: int)->matrix:
     return [[0 for i in range(height)] for j in range(width)]
 
+# this can be replaced with math.isclose()
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
     return math.fabs(a-b) < eps
 
@@ -82,6 +83,62 @@ def color_scale(a:tuple3, scale:float):
 
 def color_mul(a:tuple3, b:tuple3):
     return (a[R]*b[R],a[G]*b[G],a[B]*b[B])
+
+def matrix_is_equal(m1, m2):
+    for i in range(len(m1)):
+        for j in range(len(m1[0])):
+            if not math.isclose(m1[i][j], m2[i][j]):
+                return False
+    return True
+
+def test_matrix():
+    m1 = get_matrix(4,4)
+    m1[0] = [1,2,3,4]
+    m1[1] = [5.5,6.5,7.5,8.5]
+    m1[2] = [9,10,11,12]
+    m1[3] = [13.5,14.5,15.5,16.5]
+
+    assert(float_is_equal(m1[0][0], 1))
+    assert(float_is_equal(m1[0][3], 4))
+    assert(float_is_equal(m1[1][0], 5.5))
+    assert(float_is_equal(m1[1][2], 7.5))
+    assert(float_is_equal(m1[2][2], 11))
+    assert(float_is_equal(m1[3][0], 13.5))
+    assert(float_is_equal(m1[3][2], 15.5))
+
+    m2 = get_matrix(2,2)
+    m2[0] = [-3,5]
+    m2[1] = [1,-2]
+    assert(float_is_equal(m2[0][0], -3))
+    assert(float_is_equal(m2[0][1], 5))
+    assert(float_is_equal(m2[1][0], 1))
+    assert(float_is_equal(m2[1][1], -2))
+
+    m1 = get_matrix(4,4)
+    m1[0] = [1,2,3,4]
+    m1[1] = [5,6,7,8]
+    m1[2] = [9,8,7,6]
+    m1[3] = [5,4,3,2]
+
+    m2 = get_matrix(4,4)
+    m2[0] = [1,2,3,4]
+    m2[1] = [5,6,7,8]
+    m2[2] = [9,8,7,6]
+    m2[3] = [5,4,3,2]
+
+    assert(matrix_is_equal(m1,m2))
+
+    m2 = get_matrix(4,4)
+    m2[0] = [2,3,4,5]
+    m2[1] = [6,7,8,9]
+    m2[2] = [8,7,6,5]
+    m2[3] = [4,3,2,1]
+
+    assert(not matrix_is_equal(m1,m2))
+
+    print("Matrix Tests Passed")
+
+test_matrix()
 
 def test_colors():
     c1 = (0.9,0.6,0.75)
@@ -165,7 +222,7 @@ def test_tuples():
     c2 = tuple_cross(get_vector(2,3,4), get_vector(1,2,3))
     assert(tuple_is_equal(c2, get_vector(1,-2,1)))
 
-    print("Tuple Tests Pass")
+    print("Tuple Tests Passed")
 
 
 
