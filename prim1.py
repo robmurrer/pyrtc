@@ -114,6 +114,17 @@ def matrix_transpose(matrix: matrix)->matrix:
             result[j][i] = matrix[i][j]
     return result
 
+def matrix_det(matrix: matrix)->float:
+    return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
+
+def matrix_submatrix(matrix: matrix, row: int, col: int)->matrix:
+    result = get_matrix(len(matrix)-1, len(matrix[0])-1)
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if i != row and j != col:
+                result[i if i < row else i-1][j if j < col else j-1] = matrix[i][j]
+    return result
+
 def test_matrix():
     m1 = get_matrix(4,4)
     m1[0] = [1,2,3,4]
@@ -215,8 +226,36 @@ def test_matrix():
 
     m3 = matrix_transpose(m1)
     assert(matrix_is_equal(m3, m2))
-
     assert(matrix_is_equal(matrix_transpose(id4x4), id4x4))
+
+    m2x2 = get_matrix(2,2)
+    m2x2[0] = [1,5]
+    m2x2[1] = [-3,2]    
+
+    det = matrix_det(m2x2)
+    assert(float_is_equal(det, 17))
+
+    m3x3 = get_matrix(3,3)
+    m3x3[0] = [1,5,0]
+    m3x3[1] = [-3,2,7]
+    m3x3[2] = [0,6,-3]
+
+    m2x2 = get_matrix(2,2)
+    m2x2[0] = [-3,2]
+    m2x2[1] = [0,6]
+    assert(matrix_is_equal(matrix_submatrix(m3x3, 0, 2), m2x2))
+
+    m4x4 = get_matrix(4,4)
+    m4x4[0] = [-6,1,1,6]
+    m4x4[1] = [-8,5,8,6]
+    m4x4[2] = [-1,0,8,2]
+    m4x4[3] = [-7,1,-1,1]
+
+    m3x3 = get_matrix(3,3)
+    m3x3[0] = [-6,1,6]
+    m3x3[1] = [-8,8,6]
+    m3x3[2] = [-7,-1,1]
+    assert(matrix_is_equal(matrix_submatrix(m4x4, 2, 1), m3x3))
 
     print("Matrix Tests Passed")
 
