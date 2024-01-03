@@ -15,7 +15,14 @@ def get_point(x:float,y:float,z:float)->tuple4:
     return (x,y,z,1)
 
 def get_matrix(width: int, height: int)->matrix:
-    return [[0 for i in range(height)] for j in range(width)]
+    return [[0 for _ in range(height)] for _ in range(width)]
+
+def matrix_mul_tuple(matrix: matrix, tuple: tuple4) -> tuple4:
+    result = [0, 0, 0, 0]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            result[i] += matrix[i][j] * tuple[j]
+    return tuple(result)
 
 # this can be replaced with math.isclose()
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
@@ -91,6 +98,21 @@ def matrix_is_equal(m1, m2):
                 return False
     return True
 
+def matrix_mul(m1, m2):
+    result = [[0 for _ in range(len(m2[0]))] for _ in range(len(m1))]
+    for i in range(len(m1)):
+        for j in range(len(m2[0])):
+            for k in range(len(m2)):
+                result[i][j] += m1[i][k] * m2[k][j]
+    return result
+
+def matrix_mul_tuple4(matrix, t4: tuple4):
+    result = [0, 0, 0, 0]
+    for i in range(4):
+        for j in range(4):
+            result[i] += matrix[i][j] * t4[j]
+    return tuple(result)
+
 def test_matrix():
     m1 = get_matrix(4,4)
     m1[0] = [1,2,3,4]
@@ -128,13 +150,40 @@ def test_matrix():
 
     assert(matrix_is_equal(m1,m2))
 
-    m2 = get_matrix(4,4)
-    m2[0] = [2,3,4,5]
-    m2[1] = [6,7,8,9]
-    m2[2] = [8,7,6,5]
-    m2[3] = [4,3,2,1]
+    m3 = get_matrix(4,4)
+    m3[0] = [2,3,4,5]
+    m3[1] = [6,7,8,9]
+    m3[2] = [8,7,6,5]
+    m3[3] = [4,3,2,1]
 
-    assert(not matrix_is_equal(m1,m2))
+    assert(not matrix_is_equal(m1,m3))
+
+    m1 = get_matrix(4,4)
+    m1[0] = [-2, 1, 2, 3]
+    m1[1] = [3, 2, 1, -1]
+    m1[2] = [4, 3, 6, 5]
+    m1[3] = [1, 2, 7, 8]
+
+    mul = matrix_mul(m2,m1)
+
+    m3 = get_matrix(4,4)
+    m3[0] = [20, 22, 50, 48]
+    m3[1] = [44, 54, 114, 108]
+    m3[2] = [40, 58, 110, 102]
+    m3[3] = [16, 26, 46, 42]
+
+    assert(matrix_is_equal(mul, m3))
+
+    m1 = get_matrix(4,4)
+    m1[0] = [1,2,3,4]
+    m1[1] = [2,4,4,2]
+    m1[2] = [8,6,4,1]
+    m1[3] = [0,0,0,1]
+
+    t1 = (1, 2, 3, 1)
+
+    m2 = matrix_mul_tuple4(m1, t1)
+    assert(tuple_is_equal(m2, (18, 24, 33, 1)))
 
     print("Matrix Tests Passed")
 
