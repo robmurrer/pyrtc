@@ -1,4 +1,3 @@
-
 import math
 
 EPSILON = 1e-6
@@ -15,7 +14,6 @@ def get_point(x:float,y:float,z:float)->tuple4:
 
 def get_matrix(width: int, height: int)->matrix:
     return [[0 for _ in range(height)] for _ in range(width)]
-
 
 # this can be replaced with math.isclose()
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
@@ -115,6 +113,18 @@ def matrix_transpose(matrix: matrix)->matrix:
     return result
 
 def matrix_det(matrix: matrix)->float:
+    if len(matrix) == 2:
+        return matrix_det_2x2(matrix)
+    else:
+        return matrix_det_nxn(matrix)
+
+def matrix_det_nxn(matrix: matrix)->float:
+    result = 0
+    for i in range(len(matrix)):
+        result += matrix[0][i] * matrix_cofactor(matrix, 0, i)
+    return result
+
+def matrix_det_2x2(matrix: matrix)->float:
     return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
 
 def matrix_submatrix(matrix: matrix, row: int, col: int)->matrix:
@@ -124,6 +134,12 @@ def matrix_submatrix(matrix: matrix, row: int, col: int)->matrix:
             if i != row and j != col:
                 result[i if i < row else i-1][j if j < col else j-1] = matrix[i][j]
     return result
+
+def matrix_minor(matrix: matrix, row: int, col: int)->float:
+    return matrix_det(matrix_submatrix(matrix, row, col))
+
+def matrix_cofactor(matrix: matrix, row: int, col: int)->float:
+    return (-1)**(row+col) * matrix_minor(matrix, row, col)
 
 def test_matrix():
     m1 = get_matrix(4,4)
@@ -252,6 +268,35 @@ def test_matrix():
     m3x3[1] = [-8,8,6]
     m3x3[2] = [-7,-1,1]
     assert(matrix_is_equal(matrix_submatrix(m4x4, 2, 1), m3x3))
+
+    m3x3 = get_matrix(3,3)
+    m3x3[0] = [3,5,0]
+    m3x3[1] = [2,-1,-7]
+    m3x3[2] = [6,-1,5]
+    assert(float_is_equal(matrix_minor(m3x3, 1, 0), 25)) 
+    assert(float_is_equal(matrix_cofactor(m3x3, 0, 0), -12))
+    assert(float_is_equal(matrix_cofactor(m3x3, 1, 0), -25))
+
+    m3x3 = get_matrix(3,3)
+    m3x3[0] = [1,2,6]
+    m3x3[1] = [-5,8,-4]
+    m3x3[2] = [2,6,4]
+    assert(float_is_equal(matrix_cofactor(m3x3, 0, 0), 56))
+    assert(float_is_equal(matrix_cofactor(m3x3, 0, 1), 12))
+    assert(float_is_equal(matrix_cofactor(m3x3, 0, 2), -46))
+    assert(float_is_equal(matrix_det(m3x3), -196))  
+
+    m4x4 = get_matrix(4,4)
+    m4x4[0] = [-2,-8,3,5]
+    m4x4[1] = [-3,1,7,3]
+    m4x4[2] = [1,2,-9,6]
+    m4x4[3] = [-6,7,7,-9]
+    assert(float_is_equal(matrix_cofactor(m4x4, 0, 0), 690))
+    assert(float_is_equal(matrix_cofactor(m4x4, 0, 1), 447))
+    assert(float_is_equal(matrix_cofactor(m4x4, 0, 2), 210))
+    assert(float_is_equal(matrix_cofactor(m4x4, 0, 3), 51))
+    assert(float_is_equal(matrix_det(m4x4), -4071))
+
 
     print("Matrix Tests Passed")
 test_matrix()
