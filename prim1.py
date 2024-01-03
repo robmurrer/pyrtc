@@ -82,10 +82,10 @@ def color_scale(a:tuple3, scale:float):
 def color_mul(a:tuple3, b:tuple3):
     return (a[R]*b[R],a[G]*b[G],a[B]*b[B])
 
-def matrix_is_equal(m1: matrix, m2: matrix)->bool:
+def matrix_is_equal(m1: matrix, m2: matrix, eps: float = EPSILON)->bool:
     for i in range(len(m1)):
         for j in range(len(m1[0])):
-            if not math.isclose(m1[i][j], m2[i][j]):
+            if not math.isclose(m1[i][j], m2[i][j], abs_tol=eps):
                 return False
     return True
 
@@ -117,6 +117,17 @@ def matrix_det(matrix: matrix)->float:
         return matrix_det_2x2(matrix)
     else:
         return matrix_det_nxn(matrix)
+
+def matrix_inverse(matrix: matrix, det: float = None)->matrix:
+    result = get_matrix(len(matrix), len(matrix[0]))
+    if (det is None):
+        det = matrix_det(matrix)
+    if det == 0:
+        return (False, result)
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            result[j][i] = matrix_cofactor(matrix, i, j) / det
+    return result
 
 def matrix_det_nxn(matrix: matrix)->float:
     result = 0
@@ -296,6 +307,67 @@ def test_matrix():
     assert(float_is_equal(matrix_cofactor(m4x4, 0, 2), 210))
     assert(float_is_equal(matrix_cofactor(m4x4, 0, 3), 51))
     assert(float_is_equal(matrix_det(m4x4), -4071))
+
+    m4x4 = get_matrix(4,4)
+    m4x4[0] = [-5,2,6,-8]
+    m4x4[1] = [1,-5,1,8]
+    m4x4[2] = [7,7,-6,-7]
+    m4x4[3] = [1,-3,7,4]
+    assert(float_is_equal(matrix_det(m4x4), 532))
+    assert(float_is_equal(matrix_cofactor(m4x4, 2, 3), -160))
+    b = matrix_inverse(m4x4)
+    assert(float_is_equal(b[3][2], -160/532))
+    assert(float_is_equal(matrix_cofactor(m4x4, 3, 2), 105))
+    assert(float_is_equal(b[2][3], 105/532))
+
+    m4x4_B = get_matrix(4,4)
+    m4x4_B[0] = [0.21805, 0.45113, 0.24060, -0.04511]
+    m4x4_B[1] = [-0.80827, -1.45677, -0.44361, 0.52068]
+    m4x4_B[2] = [-0.07895, -0.22368, -0.05263, 0.19737]
+    m4x4_B[3] = [-0.52256, -0.81391, -0.30075, 0.30639]
+    assert(matrix_is_equal(b, m4x4_B, eps=1e-5))
+
+    m4x4_C = get_matrix(4,4)
+    m4x4_C[0] = [8, -5, 9, 2]
+    m4x4_C[1] = [7, 5, 6, 1]
+    m4x4_C[2] = [-6, 0, 9, 6]
+    m4x4_C[3] = [-3, 0, -9, -4]
+
+    m4x4_C_inv = get_matrix(4,4)
+    m4x4_C_inv[0] = [-0.15385, -0.15385, -0.28205, -0.53846]
+    m4x4_C_inv[1] = [-0.07692, 0.12308, 0.02564, 0.03077]
+    m4x4_C_inv[2] = [0.35897, 0.35897, 0.43590, 0.92308]
+    m4x4_C_inv[3] = [-0.69231, -0.69231, -0.76923, -1.92308]
+    assert(matrix_is_equal(matrix_inverse(m4x4_C), m4x4_C_inv, eps=1e-5))
+
+    m4x4_D = get_matrix(4,4)
+    m4x4_D[0] = [9, 3, 0, 9]
+    m4x4_D[1] = [-5, -2, -6, -3]
+    m4x4_D[2] = [-4, 9, 6, 4]
+    m4x4_D[3] = [-7, 6, 6, 2]
+
+    m4x4_D_inv = get_matrix(4,4)
+    m4x4_D_inv[0] = [-0.04074, -0.07778, 0.14444, -0.22222]
+    m4x4_D_inv[1] = [-0.07778, 0.03333, 0.36667, -0.33333]
+    m4x4_D_inv[2] = [-0.02901, -0.14630, -0.10926, 0.12963]
+    m4x4_D_inv[3] = [0.17778, 0.06667, -0.26667, 0.33333]
+    assert(matrix_is_equal(matrix_inverse(m4x4_D), m4x4_D_inv, eps=1e-5))
+
+    m4x4_A = get_matrix(4,4)
+    m4x4_A[0] = [3, -9, 7, 3]
+    m4x4_A[1] = [3, -8, 2, -9]
+    m4x4_A[2] = [-4, 4, 4, 1]
+    m4x4_A[3] = [-6, 5, -1, 1]
+
+    m4x4_B = get_matrix(4,4)
+    m4x4_B[0] = [8, 2, 2, 2]
+    m4x4_B[1] = [3, -1, 7, 0]
+    m4x4_B[2] = [7, 0, 5, 4]
+    m4x4_B[3] = [6, -2, 0, 5]
+
+    m4x4_AB = matrix_mul(m4x4_A, m4x4_B)
+    assert(matrix_is_equal(matrix_mul(m4x4_AB, matrix_inverse(m4x4_B)), m4x4_A, eps=1e-5))
+
 
 
     print("Matrix Tests Passed")
