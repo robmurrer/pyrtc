@@ -16,12 +16,6 @@ def get_point(x:float,y:float,z:float)->tuple4:
 def get_matrix(width: int, height: int)->matrix:
     return [[0 for _ in range(height)] for _ in range(width)]
 
-def matrix_mul_tuple(matrix: matrix, tuple: tuple4) -> tuple4:
-    result = [0, 0, 0, 0]
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
-            result[i] += matrix[i][j] * tuple[j]
-    return tuple(result)
 
 # this can be replaced with math.isclose()
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
@@ -105,11 +99,12 @@ def matrix_mul(m1: matrix, m2: matrix)->matrix:
                 result[i][j] += m1[i][k] * m2[k][j]
     return result
 
-def matrix_mul_tuple4(matrix: matrix, t4: tuple4)->tuple4:
+
+def matrix_mul_tuple(matrix: matrix, t: tuple4) -> tuple4:
     result = [0, 0, 0, 0]
-    for i in range(4):
-        for j in range(4):
-            result[i] += matrix[i][j] * t4[j]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            result[i] += matrix[i][j] * t[j]
     return tuple(result)
 
 def matrix_transpose(matrix: matrix)->matrix:
@@ -188,7 +183,7 @@ def test_matrix():
 
     t1 = (1, 2, 3, 1)
 
-    m2 = matrix_mul_tuple4(m1, t1)
+    m2 = matrix_mul_tuple(m1, t1)
     assert(tuple_is_equal(m2, (18, 24, 33, 1)))
 
     id4x4 = get_matrix(4,4)
