@@ -185,6 +185,21 @@ def test_matrix():
     m2 = matrix_mul_tuple4(m1, t1)
     assert(tuple_is_equal(m2, (18, 24, 33, 1)))
 
+    id4x4 = get_matrix(4,4)
+    id4x4[0] = [1,0,0,0]
+    id4x4[1] = [0,1,0,0]
+    id4x4[2] = [0,0,1,0]
+    id4x4[3] = [0,0,0,1]
+
+    m1 = get_matrix(4,4)
+    m1[0] = [0,1,2,4]
+    m1[1] = [1,2,4,8]
+    m1[2] = [2,4,8,16]
+    m1[3] = [4,8,16,32]
+
+    assert(matrix_is_equal(matrix_mul(id4x4, m1), m1))
+    assert(matrix_is_equal(matrix_mul(m1, id4x4), m1))
+
     print("Matrix Tests Passed")
 
 test_matrix()
