@@ -159,7 +159,6 @@ def test_matrix():
     m2[1] = [5,6,7,8]
     m2[2] = [9,8,7,6]
     m2[3] = [5,4,3,2]
-
     assert(matrix_is_equal(m1,m2))
 
     m3 = get_matrix(4,4)
@@ -167,7 +166,6 @@ def test_matrix():
     m3[1] = [6,7,8,9]
     m3[2] = [8,7,6,5]
     m3[3] = [4,3,2,1]
-
     assert(not matrix_is_equal(m1,m3))
 
     m1 = get_matrix(4,4)
@@ -183,7 +181,6 @@ def test_matrix():
     m3[1] = [44, 54, 114, 108]
     m3[2] = [40, 58, 110, 102]
     m3[3] = [16, 26, 46, 42]
-
     assert(matrix_is_equal(mul, m3))
 
     m1 = get_matrix(4,4)
@@ -208,7 +205,6 @@ def test_matrix():
     m1[1] = [1,2,4,8]
     m1[2] = [2,4,8,16]
     m1[3] = [4,8,16,32]
-
     assert(matrix_is_equal(matrix_mul(id4x4, m1), m1))
     assert(matrix_is_equal(matrix_mul(m1, id4x4), m1))
 
@@ -258,7 +254,6 @@ def test_matrix():
     assert(matrix_is_equal(matrix_submatrix(m4x4, 2, 1), m3x3))
 
     print("Matrix Tests Passed")
-
 test_matrix()
 
 def test_colors():
@@ -344,7 +339,4 @@ def test_tuples():
     assert(tuple_is_equal(c2, get_vector(1,-2,1)))
 
     print("Tuple Tests Passed")
-
-
-
 test_tuples()
