@@ -91,14 +91,14 @@ def color_scale(a:tuple3, scale:float):
 def color_mul(a:tuple3, b:tuple3):
     return (a[R]*b[R],a[G]*b[G],a[B]*b[B])
 
-def matrix_is_equal(m1, m2):
+def matrix_is_equal(m1: matrix, m2: matrix)->bool:
     for i in range(len(m1)):
         for j in range(len(m1[0])):
             if not math.isclose(m1[i][j], m2[i][j]):
                 return False
     return True
 
-def matrix_mul(m1, m2):
+def matrix_mul(m1: matrix, m2: matrix)->matrix:
     result = [[0 for _ in range(len(m2[0]))] for _ in range(len(m1))]
     for i in range(len(m1)):
         for j in range(len(m2[0])):
@@ -106,12 +106,19 @@ def matrix_mul(m1, m2):
                 result[i][j] += m1[i][k] * m2[k][j]
     return result
 
-def matrix_mul_tuple4(matrix, t4: tuple4):
+def matrix_mul_tuple4(matrix: matrix, t4: tuple4)->tuple4:
     result = [0, 0, 0, 0]
     for i in range(4):
         for j in range(4):
             result[i] += matrix[i][j] * t4[j]
     return tuple(result)
+
+def matrix_transpose(matrix: matrix)->matrix:
+    result = get_matrix(len(matrix), len(matrix[0]))
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            result[j][i] = matrix[i][j]
+    return result
 
 def test_matrix():
     m1 = get_matrix(4,4)
@@ -199,6 +206,23 @@ def test_matrix():
 
     assert(matrix_is_equal(matrix_mul(id4x4, m1), m1))
     assert(matrix_is_equal(matrix_mul(m1, id4x4), m1))
+
+    m1 = get_matrix(4,4)
+    m1[0] = [0,9,3,0]
+    m1[1] = [9,8,0,8]
+    m1[2] = [1,8,5,3]
+    m1[3] = [0,0,5,8]
+
+    m2 = get_matrix(4,4)
+    m2[0] = [0,9,1,0]
+    m2[1] = [9,8,8,0]
+    m2[2] = [3,0,5,5]
+    m2[3] = [0,8,3,8]
+
+    m3 = matrix_transpose(m1)
+    assert(matrix_is_equal(m3, m2))
+
+    assert(matrix_is_equal(matrix_transpose(id4x4), id4x4))
 
     print("Matrix Tests Passed")
 
