@@ -12,6 +12,7 @@ Checked with Python 3.9.6
     pip install -r requirements.txt
 
 ## Philosophy
+I'm not a python expert. I tried to write this without numpy as long as I could stand. Some parts are not numpy for performance comparisons later. I turned on copilot about halfway through chapter 3...
 
 ## Chapters
 [X] 1
