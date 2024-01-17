@@ -455,5 +455,7 @@ def test_tuples():
     c2 = tuple_cross(get_vector(2,3,4), get_vector(1,2,3))
     assert(tuple_is_equal(c2, get_vector(1,-2,1)))
 
+
     print("Tuple Tests Passed")
+    
 test_tuples()
