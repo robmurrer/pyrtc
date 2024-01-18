@@ -15,6 +15,14 @@ def get_point(x:float,y:float,z:float)->tuple4:
 def get_matrix(width: int, height: int)->matrix:
     return [[0 for _ in range(height)] for _ in range(width)]
 
+def get_matrix_4x4_id():
+    id_4x4 = get_matrix(4,4)
+    id_4x4[0] = [1,0,0,0]
+    id_4x4[1] = [0,1,0,0]
+    id_4x4[2] = [0,0,1,0]
+    id_4x4[3] = [0,0,0,1]
+    return id_4x4
+
 # this can be replaced with math.isclose()
 def float_is_equal(a:float, b:float, eps=EPSILON)->bool:
     return math.fabs(a-b) < eps
@@ -368,6 +376,9 @@ def test_matrix():
     m4x4_AB = matrix_mul(m4x4_A, m4x4_B)
     assert(matrix_is_equal(matrix_mul(m4x4_AB, matrix_inverse(m4x4_B)), m4x4_A, eps=1e-5))
 
+    id4x4 = get_matrix_4x4_id()
+    inv_id4x4 = matrix_inverse(id4x4)
+    assert(matrix_is_equal(inv_id4x4, id4x4))
 
 
     print("Matrix Tests Passed")

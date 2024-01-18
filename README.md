@@ -15,13 +15,21 @@ Checked with Python 3.9.6
 I'm not a python expert. I tried to write this without numpy as long as I could stand. Some parts are not numpy for performance comparisons later. I turned on copilot about halfway through chapter 3...
 
 ## Chapters
+
 [X] 1
+
 [X] 2
+
 [X] 3
+
 [X] 4
+
 [ ] 5
+
 [ ] 6
+
 [ ] 7
+
 ...
 
 ## Demos
