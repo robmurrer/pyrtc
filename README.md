@@ -1,5 +1,5 @@
 # Python Ray Tracer Challenge
-p(c) 2024 Robert Murrer (Tests Jamis Buck) ... and copilot?
+(c) 2024 Robert Murrer (Tests Jamis Buck) ... and copilot?
 
 Python Ray Tracer Challenge is a very cool book by Jamis Buck. I recommend it. This is what I have so far.
 
